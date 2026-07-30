@@ -1,0 +1,43 @@
+services:
+  # lacarte-users-api:
+  #   build: .
+  #   container_name: lacarte-users-api
+  #   ports:
+  #     - "8080:8000"
+  #   depends_on:
+  #     - lacarte-users-db
+  #   env_file:
+  #     - .env
+
+  lacarte-users-db:
+    image: postgres:15
+    container_name: lacarte-users-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB__USER}
+      POSTGRES_PASSWORD: ${DB__PASSWORD}
+      POSTGRES_DB: ${DB__NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  lacarte-users-pgadmin:
+    image: dpage/pgadmin4:8.9
+    container_name: lacarte-users-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN__EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN__PASSWORD}
+    ports:
+      - "5050:80"
+    depends_on:
+      - lacarte-users-db
+
+volumes:
+  pgdata:
