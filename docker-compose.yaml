@@ -1,13 +1,13 @@
 services:
-  # lacarte-users-api:
-  #   build: .
-  #   container_name: lacarte-users-api
-  #   ports:
-  #     - "8080:8000"
-  #   depends_on:
-  #     - lacarte-users-db
-  #   env_file:
-  #     - .env
+  lacarte-users-api:
+    build: .
+    container_name: lacarte-users-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - lacarte-users-db
+    env_file:
+      - .env
 
   lacarte-users-db:
     image: postgres:15
