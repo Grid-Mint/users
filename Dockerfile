@@ -1,32 +1,24 @@
+# ---------- build ----------
 FROM golang:1.26.5-bookworm AS builder
 
-# Create and change to the app directory.
 WORKDIR /app
 
-# Retrieve application dependencies.
-# This allows the container build to reuse cached dependencies.
-# Expecting to copy go.mod and if present go.sum.
+# Спочатку тільки залежності — шар кешується, поки go.mod/go.sum не змінились
 COPY src/go.* ./
 RUN go mod download
 
-# Copy local code to the container image.
 COPY src/ ./
 
-# Build the binary.
-RUN go build -v -o server
+# CGO_ENABLED=0 — статичний бінарник, не залежить від glibc
+RUN CGO_ENABLED=0 go build -v -ldflags="-s -w" -o server
 
-# Use the official Debian slim image for a lean production container.
-# https://hub.docker.com/_/debian
-# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM debian:bookworm-slim
-RUN set -x && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+# ---------- runtime ----------
+FROM gcr.io/distroless/static-debian12
 
-# Copy the binary to the production image from the builder stage.
 COPY --from=builder /app/server /app/server
 
-# Run the web service on container startup.
-CMD ["/app/server"]
+EXPOSE 8080
 
-# [END cloudrun_helloworld_dockerfile_go]
+USER nonroot:nonroot
+
+ENTRYPOINT ["/app/server"]
