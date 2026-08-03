@@ -15,5 +15,5 @@ type User struct {
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	Role         enums.Role
-	IsDeleted    bool
+	Status    	 enums.Status
 }
