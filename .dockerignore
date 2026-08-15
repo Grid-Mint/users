@@ -5,3 +5,7 @@
 docker-compose.yaml
 README.md
 Dockerfile
+**/bin/
+**/obj/
+.vs/
+.vscode/

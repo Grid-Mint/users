@@ -1,24 +1,28 @@
 # ---------- build ----------
-FROM golang:1.26.5-bookworm AS builder
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS builder
 
-WORKDIR /app
+WORKDIR /src
 
-# Спочатку тільки залежності — шар кешується, поки go.mod/go.sum не змінились
-COPY src/go.* ./
-RUN go mod download
+# Спочатку тільки файли проєктів — шар кешується, поки вони не змінились
+COPY Users.slnx ./
+COPY src/Domain/Users.Domain.csproj src/Domain/
+COPY src/Application/Users.Application.csproj src/Application/
+COPY src/Infrastructure/Users.Infrastructure.csproj src/Infrastructure/
+COPY src/Api/Users.Api.csproj src/Api/
+RUN dotnet restore src/Api/Users.Api.csproj
 
-COPY src/ ./
-
-# CGO_ENABLED=0 — статичний бінарник, не залежить від glibc
-RUN CGO_ENABLED=0 go build -v -ldflags="-s -w" -o server
+COPY src/ src/
+RUN dotnet publish src/Api/Users.Api.csproj -c Release -o /app --no-restore
 
 # ---------- runtime ----------
-FROM gcr.io/distroless/static-debian12
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
-COPY --from=builder /app/server /app/server
+WORKDIR /app
+COPY --from=builder /app .
 
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
 
-USER nonroot:nonroot
+USER app
 
-ENTRYPOINT ["/app/server"]
+ENTRYPOINT ["dotnet", "Users.Api.dll"]
