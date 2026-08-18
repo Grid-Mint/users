@@ -21,6 +21,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .IsRequired()
                 .HasMaxLength(100);
 
+            entity.Property(e => e.LastName)
+                .IsRequired()
+                .HasMaxLength(100); 
+
             entity.Property(e => e.FullName)
                 .IsRequired(false)
                 .HasMaxLength(200);
@@ -39,7 +43,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             entity.Property(e => e.Status).IsRequired()
                 .HasDefaultValue(Statuses.Active);
-                
+
             entity.Property(e => e.Role).IsRequired();
         });
 
