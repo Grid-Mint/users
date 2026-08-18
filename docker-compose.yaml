@@ -5,7 +5,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - lacarte-users-db
+      lacarte-users-db:
+        condition: service_healthy
     env_file:
       - .env
 
@@ -17,7 +18,7 @@ services:
     environment:
       POSTGRES_USER: ${DB__USER}
       POSTGRES_PASSWORD: ${DB__PASSWORD}
-      POSTGRES_DB: ${DB__NAME}
+      POSTGRES_DB: ${USERS__DB__NAME}
     ports:
       - "5432:5432"
     volumes:

@@ -17,16 +17,17 @@ public static class PersistenceServiceRegistration
 
     public static IServiceCollection AddDbConnection(this IServiceCollection services, IConfiguration configuration)
     {
-        var dbSettings = configuration.GetSection("DatabaseSettings");
         var dbPassword = configuration["DB:PASSWORD"]
             ?? throw new InvalidOperationException("The DB__PASSWORD environment variable is not set.");
+        var dbSettings = configuration.GetSection("DB");
+        var usersDbSettings = configuration.GetSection("USERS:DB");
 
         var connectionString = new NpgsqlConnectionStringBuilder
         {
-            Host = dbSettings["DbHost"],
-            Port = int.Parse(dbSettings["DbPort"] ?? "5432"),
-            Database = dbSettings["DbName"],
-            Username = dbSettings["DbUser"],
+            Host = usersDbSettings["HOST"] ?? "localhost",
+            Port = int.Parse(dbSettings["PORT"] ?? "5432"),
+            Database = usersDbSettings["NAME"],
+            Username = dbSettings["USER"],
             Password = dbPassword
         }.ConnectionString;
 
