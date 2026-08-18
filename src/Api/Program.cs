@@ -26,8 +26,8 @@ using (var scope = app.Services.CreateScope())
 app.UseExceptionHandler();
 app.UseSerilogRequestLogging();
 
-app.MapGet("/users", () => "[users]");
-app.MapGet("/user/{id}", (int id) => $"user {id}");
+app.MapGet("/users", () => "[users 1231232131]");
+app.MapGet("/user/{id}", (int id) => $"user 1231231231 {id}");
 
 
 app.Run();
