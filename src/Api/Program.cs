@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Users.Api.Utils;
+using Users.Infrastructure;
 using Users.Infrastructure.Database;
-using Users.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,7 @@ app.UseExceptionHandler();
 app.UseSerilogRequestLogging();
 
 app.MapGet("/users", () => "[users 1231232131]");
-app.MapGet("/user/{id}", (int id) => $"user 1231231231 {id}");
+app.MapGet("/users/{id}", (int id) => $"user 1231231231 {id}");
 
 
 app.Run();

@@ -3,6 +3,8 @@ bin/
 obj/
 out/
 
+logs/
+
 # Rider / Visual Studio
 .vs/
 .idea/

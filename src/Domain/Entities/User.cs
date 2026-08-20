@@ -10,6 +10,7 @@ public class User
     public string? FullName { get; set; }
     public string Email { get; set; } = null!;
     public string PasswordHash { get; set; } = null!;
+    public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public Statuses Status { get; set; }

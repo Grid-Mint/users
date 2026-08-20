@@ -2,15 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using Users.Domain.Repositories;
 using Users.Infrastructure.Database;
+using Users.Infrastructure.Database.Repositories;
 
-namespace Users.Infrastructure.Persistence;
+namespace Users.Infrastructure;
 
 public static class PersistenceServiceRegistration
 {
     public static IServiceCollection AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
-
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }
