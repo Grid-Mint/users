@@ -27,7 +27,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             entity.Property(e => e.LastName)
                 .IsRequired()
-                .HasMaxLength(100); 
+                .HasMaxLength(100);
 
             entity.Property(e => e.FullName)
                 .IsRequired(false)
@@ -47,13 +47,23 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.UpdatedAt)
                 .IsRequired(false);
 
-            entity.Property(e => e.Status).IsRequired()
+            entity.Property(e => e.Status)
+                .IsRequired()
+                .HasConversion<string>()
                 .HasDefaultValue(Statuses.Active);
 
-            entity.Property(e => e.Role).IsRequired();
+            entity.Property(e => e.Role)
+                .IsRequired()
+                .HasConversion<string>();
         });
 
         builder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+    {
+        builder.Properties<Statuses>().HaveConversion<string>().HaveMaxLength(20);
+        builder.Properties<Roles>().HaveConversion<string>().HaveMaxLength(20);
     }
 }

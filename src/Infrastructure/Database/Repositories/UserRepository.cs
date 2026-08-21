@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Users.Domain.Entities;
+using Users.Domain.Enums;
 using Users.Domain.Repositories;
 
 namespace Users.Infrastructure.Database.Repositories;
@@ -41,6 +42,26 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         if (user is null) return false;
 
         user.IsDeleted = true;
+        return true;
+    }
+
+    public async Task<bool> UpdateRoleAsync(Guid id, Roles role, CancellationToken ct = default)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
+
+        if (user is null) return false;
+
+        user.Role = role;
+        return true;
+    }
+
+    public async Task<bool> UpdateStatusAsync(Guid id, Statuses status, CancellationToken ct = default)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
+
+        if (user is null) return false;
+
+        user.Status = status;
         return true;
     }
 }
