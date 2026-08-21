@@ -6,13 +6,13 @@ namespace Users.Api.Controllers;
 
 [Route("users/")]
 [ApiController]
-public class UserController(CreateUserCommandHandler createUserCommandHandler) : ControllerBase
+public class UserController(CreateUserCommandHandler createUserCommandHandler) : BaseApiController
 {
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command, CancellationToken cancellationToken)
     {
         var user = await createUserCommandHandler.HandleAsync(command, cancellationToken);
 
-        return Ok();
+        return HandleResult(user);
     }
 }
