@@ -16,6 +16,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
