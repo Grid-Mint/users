@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
+    <Folder Include="Errors\" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,15 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\" />
+    <Folder Include="Users\" />
+    <Folder Include="Users\Commands\" />
+    <Folder Include="Users\Commands\CreateUser\" />
+    <Folder Include="Users\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
   </ItemGroup>
 
   <PropertyGroup>

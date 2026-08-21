@@ -16,7 +16,17 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -26,8 +36,6 @@ using (var scope = app.Services.CreateScope())
 app.UseExceptionHandler();
 app.UseSerilogRequestLogging();
 
-app.MapGet("/users", () => "[users 1231232131]");
-app.MapGet("/users/{id}", (int id) => $"user 1231231231 {id}");
-
+app.MapControllers();
 
 app.Run();

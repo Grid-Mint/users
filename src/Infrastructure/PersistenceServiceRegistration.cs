@@ -1,10 +1,14 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using Users.Application.Abstractions;
+using Users.Application.Users.Commands.CreateUser;
 using Users.Domain.Repositories;
 using Users.Infrastructure.Database;
 using Users.Infrastructure.Database.Repositories;
+using Users.Infrastructure.Security;
 
 namespace Users.Infrastructure;
 
@@ -12,7 +16,18 @@ public static class PersistenceServiceRegistration
 {
     public static IServiceCollection AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<CreateUserCommandHandler>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddValidators(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
 
         return services;
     }
@@ -41,6 +56,7 @@ public static class PersistenceServiceRegistration
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbConnection(configuration);
+        services.AddValidators(configuration);
         services.AddDependencyInjection(configuration);
 
         return services;

@@ -17,10 +17,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         {
             entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.IsDeleted)
-                .IsRequired()
-                .HasDefaultValue(false);
-
             entity.Property(e => e.FirstName)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -57,7 +53,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasConversion<string>();
         });
 
-        builder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
+        builder.Entity<User>().HasQueryFilter(u => !u.Status.Equals(Statuses.Inactive));
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
