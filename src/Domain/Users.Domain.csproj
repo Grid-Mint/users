@@ -7,4 +7,8 @@
     <UserSecretsId>d2ff70e2-c9e9-469a-b0e6-8f9ad4728538</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+  </ItemGroup>
+
 </Project>
