@@ -4,7 +4,7 @@ using Users.Application.Users.Commands.CreateUser;
 
 namespace Users.Api.Controllers;
 
-[Route("users/")]
+[Route("users")]
 [ApiController]
 public class UserController(CreateUserCommandHandler createUserCommandHandler) : BaseApiController
 {

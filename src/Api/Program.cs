@@ -36,8 +36,6 @@ using (var scope = app.Services.CreateScope())
 app.UseExceptionHandler();
 app.UseSerilogRequestLogging();
 
-app.MapGet("/users", () => "[users 1231232131]");
-app.MapGet("/users/{id}", (int id) => $"user 1231231231 {id}");
-
+app.MapControllers();
 
 app.Run();
