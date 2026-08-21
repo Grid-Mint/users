@@ -9,7 +9,9 @@
     <Folder Include="Users\" />
     <Folder Include="Users\Commands\" />
     <Folder Include="Users\Commands\CreateUser\" />
+    <Folder Include="Users\Commands\UpdateUser\" />
     <Folder Include="Users\Queries\" />
+    <Folder Include="Users\Queries\GetUsers\" />
   </ItemGroup>
 
   <ItemGroup>

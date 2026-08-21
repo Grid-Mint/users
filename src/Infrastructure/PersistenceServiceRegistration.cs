@@ -5,6 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Users.Application.Abstractions;
 using Users.Application.Users.Commands.CreateUser;
+using Users.Application.Users.Commands.DeleteUser;
+using Users.Application.Users.Commands.UpdateUser;
+using Users.Application.Users.Commands.UpdateUserEmail;
+using Users.Application.Users.Commands.UpdateUserRole;
+using Users.Application.Users.Queries.EmailExists;
+using Users.Application.Users.Queries.GetUserByEmail;
+using Users.Application.Users.Queries.GetUserById;
+using Users.Application.Users.Queries.GetUsers;
 using Users.Domain.Repositories;
 using Users.Infrastructure.Database;
 using Users.Infrastructure.Database.Repositories;
@@ -19,6 +27,14 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<CreateUserCommandHandler>();
+        services.AddScoped<UpdateUserCommandHandler>();
+        services.AddScoped<UpdateUserEmailCommandHandler>();
+        services.AddScoped<EmailExistsQueryHandler>();
+        services.AddScoped<GetUserByIdQueryHandler>();
+        services.AddScoped<GetUserByEmailQueryHandler>();
+        services.AddScoped<GetUsersQueryHandler>();
+        services.AddScoped<DeleteUserCommandHandler>();
+        services.AddScoped<UpdateUserRoleCommandHandler>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -28,6 +44,7 @@ public static class PersistenceServiceRegistration
     public static IServiceCollection AddValidators(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<UpdateUserCommandValidator>();
 
         return services;
     }
