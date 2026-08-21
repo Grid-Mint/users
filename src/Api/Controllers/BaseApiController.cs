@@ -48,6 +48,13 @@ public abstract class BaseApiController : ControllerBase
 
         problem.Extensions["code"] = error.Code;
 
+        if (error is ValidationError validationError)
+        {
+            problem.Extensions["errors"] = validationError.Errors
+                .GroupBy(e => e.Code)
+                .ToDictionary(g => g.Key, g => g.Select(e => e.Message).ToArray());
+        }
+
         return StatusCode(status, problem);
     }
 }

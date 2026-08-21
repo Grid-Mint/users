@@ -12,7 +12,16 @@ public class CreateUserCommandHandler(IValidator<CreateUserCommand> validator, I
 {
     public async Task<Result<Guid>> HandleAsync(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(command, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors
+                .Select(failure => new Error(failure.PropertyName, failure.ErrorMessage, ErrorType.Validation))
+                .ToArray();
+
+            return Result.Failure<Guid>(new ValidationError(errors));
+        }
 
         if (await userRepository.ExistsByEmailAsync(command.Email, cancellationToken))
             return UserErrors.EmailAlreadyUsed(command.Email);
