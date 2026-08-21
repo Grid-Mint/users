@@ -33,7 +33,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .IsRequired(false)
                 .HasMaxLength(200);
 
-            entity.HasIndex(e => e.Email).IsUnique();
+            entity.HasIndex(e => e.Email)
+                .IsUnique()
+                .HasFilter("\"IsDeleted\" = false");
 
             entity.Property(e => e.PasswordHash)
                 .IsRequired();
@@ -51,6 +53,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.Role).IsRequired();
         });
 
+        builder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }

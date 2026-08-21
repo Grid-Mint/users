@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Users.Api.Utils;
 
@@ -13,10 +14,13 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         response.ContentType = "application/json";
         response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        await response.WriteAsJsonAsync(new
+        var problemDetails = new ProblemDetails
         {
-            error = "An unexpected error occurred."
-        }, cancellationToken);
+            Status = response.StatusCode,
+            Title = "An unexpected error occurred."
+        };
+
+        await response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true;
     }

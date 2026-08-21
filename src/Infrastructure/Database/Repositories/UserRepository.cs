@@ -7,12 +7,8 @@ namespace Users.Infrastructure.Database.Repositories;
 
 public class UserRepository(ApplicationDbContext context) : IUserRepository
 {
-    public async Task<User> AddAsync(User user, CancellationToken ct = default)
-    {
-        var userEntry = context.Users.Add(user);
-        await context.SaveChangesAsync(ct);
-        return userEntry.Entity;
-    }
+    public Task<User> AddAsync(User user, CancellationToken ct = default)
+        => Task.FromResult(context.Users.Add(user).Entity);
 
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default)
     {
@@ -40,15 +36,11 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 
     public async Task<bool> SoftDeleteAsync(Guid id, CancellationToken ct = default)
     {
-        return await context.Users
-            .Where(u => u.Id == id)
-            .ExecuteUpdateAsync(u => u.SetProperty(user => user.IsDeleted, true), ct) > 0;
-    }
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
 
-    public async Task<User> UpdateAsync(User user, CancellationToken ct = default)
-    {
-        var userEntry = context.Users.Update(user);
-        await context.SaveChangesAsync(ct);
-        return userEntry.Entity;
+        if (user is null) return false;
+
+        user.IsDeleted = true;
+        return true;
     }
 }
