@@ -9,6 +9,11 @@ public static class UserErrors
         $"User with id '{id}' was not found.",
         ErrorType.NotFound);
 
+    public static Error NotFound(string email) => new(
+        "Users.NotFound",
+        $"User with email '{email}' was not found.",
+        ErrorType.NotFound);
+
     public static Error EmailAlreadyUsed(string email) => new(
         "Users.EmailAlreadyUsed",
         $"Email '{email}' is already in use.",
