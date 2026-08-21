@@ -8,4 +8,6 @@ public sealed record Error(string Code, string Message, ErrorType Type)
         "Error.NullValue",
         "A null value was provided.",
         ErrorType.Failure);
+
+    
 }

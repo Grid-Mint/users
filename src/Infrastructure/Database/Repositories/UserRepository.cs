@@ -41,7 +41,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 
         if (user is null) return false;
 
-        user.IsDeleted = true;
+        user.Status = Statuses.Inactive;
         return true;
     }
 
