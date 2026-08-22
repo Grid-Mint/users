@@ -36,9 +36,9 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     }
 
     public Task<User?> GetDeletedByIdAsync(Guid id, CancellationToken ct = default)
-    {
-        return context.Users.IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Id == id, ct);
-    }
+        => context.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.Id == id && u.Status == Statuses.Inactive, ct);
 
     public async Task<bool> SoftDeleteAsync(Guid id, CancellationToken ct = default)
     {
