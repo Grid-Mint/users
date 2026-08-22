@@ -30,8 +30,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasMaxLength(200);
 
             entity.HasIndex(e => e.Email)
-                .IsUnique()
-                .HasFilter("\"IsDeleted\" = false");
+                .IsUnique();
 
             entity.Property(e => e.PasswordHash)
                 .IsRequired();

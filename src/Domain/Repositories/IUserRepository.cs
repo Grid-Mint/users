@@ -13,4 +13,5 @@ public interface IUserRepository
     Task<bool> SoftDeleteAsync(Guid id, CancellationToken ct = default);
     Task<bool> UpdateRoleAsync(Guid id, Roles role, CancellationToken ct = default);
     Task<bool> UpdateStatusAsync(Guid id, Statuses status, CancellationToken ct = default);
+    Task<User?> GetDeletedByIdAsync(Guid id, CancellationToken ct = default);
 }

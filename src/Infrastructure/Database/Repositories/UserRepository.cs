@@ -35,6 +35,11 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
     }
 
+    public Task<User?> GetDeletedByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        return context.Users.IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Id == id, ct);
+    }
+
     public async Task<bool> SoftDeleteAsync(Guid id, CancellationToken ct = default)
     {
         var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id, ct);
@@ -42,6 +47,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         if (user is null) return false;
 
         user.Status = Statuses.Inactive;
+        user.Email = $"deleted_{user.Id}_{user.Email}";
         return true;
     }
 

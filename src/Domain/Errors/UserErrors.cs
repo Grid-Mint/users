@@ -4,6 +4,11 @@ namespace Users.Domain.Errors;
 
 public static class UserErrors
 {
+    public static Error DeleteFailed(Guid id) => new(
+        "Users.DeleteFailed",
+        $"Failed to delete user with id '{id}'.",
+        ErrorType.Conflict);
+
     public static Error NotFound(Guid id) => new(
         "Users.NotFound",
         $"User with id '{id}' was not found.",
